@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cloud Run Image Upload Demo</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .upload-form { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; }
+        .image-list { margin-top: 30px; }
+        .image-item { border-bottom: 1px solid #eee; padding: 10px 0; }
+        .image-item img { max-width: 100px; max-height: 100px; vertical-align: middle; margin-right: 10px;}
+        .error { color: red; font-weight: bold; margin-top: 10px;}
+    </style>
+</head>
+<body>
+
+    <h1>Upload an Image</h1>
+    <p>Files will be uploaded to GCS bucket: <strong>{{ bucket_name }}</strong> and metadata stored in Firestore.</p>
+
+    <div class="upload-form">
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" required>
+            <button type="submit">Upload Image</button>
+        </form>
+        {% if error_message %}
+            <p class="error">{{ error_message }}</p>
+        {% endif %}
+    </div>
+
+    <div class="image-list">
+        <h2>Recently Uploaded Images:</h2>
+        {% if images %}
+            {% for image in images %}
+            <div class="image-item">
+                <a href="{{ image.gcs_url }}" target="_blank">
+                   <img src="{{ image.gcs_url }}" alt="{{ image.filename }}" title="Click to view full size">
+                </a>
+                <span>{{ image.filename }}</span>
+                <small>(Uploaded: {{ image.uploaded_at.strftime('%Y-%m-%d %H:%M:%S') if image.uploaded_at else 'N/A' }})</small><br/>
+                <small><a href="{{ image.gcs_url }}" target="_blank">{{ image.gcs_url }}</a></small>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No images uploaded yet or unable to retrieve list.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>

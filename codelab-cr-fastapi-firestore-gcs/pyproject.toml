@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "cloud-run-fastapi-demo"
+version = "0.1.0"
+description = "Demo FastAPI app for Cloud Run showing GCS upload and Firestore integration."
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.110.0"
+uvicorn = {extras = ["standard"], version = "^0.29.0"} # Includes python-multipart
+google-cloud-storage = "^2.16.0"
+google-cloud-firestore = "^2.16.0"
+jinja2 = "^3.1.3"
+python-multipart = "^0.0.20"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
